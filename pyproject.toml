@@ -2,7 +2,7 @@
 [project]
 name = "KaleidiaNodes" # Unique identifier for your node. Immutable after creation.
 description = "A simple set of nodes to make things easier. String Nodes and Files nodes."
-version = "1.0.0" # Custom Node version. Must be semantically versioned.
+version = "1.0.01" # Custom Node version. Must be semantically versioned.
 license = { file = "LICENSE.txt" }
 dependencies  = [] # Filled in from requirements.txt
 
@@ -12,4 +12,4 @@ Repository = "https://github.com/Kaleidia/KaleidiaNodes"
 [tool.comfy]
 PublisherId = "kaleidia" # TODO (fill in Publisher ID from Comfy Registry Website).
 DisplayName = "KaleidiaNodes" # Display name for the Custom Node. Can be changed later.
-Icon = "https://example.com/icon.png" # SVG, PNG, JPG or GIF (MAX. 800x400px)
+#Icon = "https://example.com/icon.png" # SVG, PNG, JPG or GIF (MAX. 800x400px)
