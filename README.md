@@ -17,6 +17,13 @@ It goes to the configured output directory and adds a directory if none of the p
 
 This node was supposed to be general csv file reader for files with the structure "name,prompt,negative_prompt". Due to the static nature of nodes in just python, it was changed and now reads the file "styles.csv" from the provided data directory. It then lists all names from that file in a combo / selection box and returns the prompt and negative prompt texts in their respective outputs. Further use of these outputs depends on the individual setup, for my use case, I replace the word *prompt* with an additional prompt providing subject and further info. All the positive sample prompts have the word *prompt* in the positive part and the negative prompt can be appended to a general negative prompt.
 
+#### Custom Styles or Other Applications
+There are numerous ways to use this node apart from just providing styles. You can extent or replace the entries in the styles.csv file however you like. The node just reads the first column as the name, the second as a prompt or first output and the third as a negative prompt or second output. As long as the structure is kept like this, there should be no problem with loading the file. Any additional columns should be ignored. Columns that start with *>>>>>>* are used in the file to organize different groups of styles, those are also ignored in the parsing process.
+
+Sadly due to the static nature of the python nodes and me not tackling js to make it more dynamic, the filename is hardcoded at this point and no other file in the data folder will be loaded. 
+
+Despite the name, the file can also be used to save and load reusable prompts with positive and negative parts. 
+
 ## String Nodes
 There are three string nodes so far, one that formats an integer into a string with optional leading zeroes, one that generates a random integer and gives it out as either int or string and the the same with a floating point number.
 
