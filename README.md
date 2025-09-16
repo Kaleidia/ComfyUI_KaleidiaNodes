@@ -23,7 +23,7 @@ There are three string nodes so far, one that formats an integer into a string w
 ### Int To String
 <img width="448" height="282" alt="image" src="https://github.com/user-attachments/assets/9678a13b-72a0-43d7-a270-ce5bec3db370" />
 
-This node gets an integer as input and can format it to a specified number of digits adding leading zeroes. It then outputs that number either as a formatted string or as an integer (basically passing the int through to be used for other calculations later). The added zeroes are optional and can be turned off with the *use digits* switch at the buttom. That does not change the digits of the provided integer.
+This node gets an integer as input and can format it to a specified number of digits adding leading zeroes. It then outputs that number either as a formatted string or as an integer (basically passing the int through to be used for other calculations later). The added zeroes are optional and can be turned off with the *use digits* switch at the bottom. That does not change the digits of the provided integer.
 
 ### Random Int to String
 This node generates a random integer in the provided range from min to max and outputs that as a string.
