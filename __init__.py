@@ -1,5 +1,6 @@
 from .nodes.toString import *
 from .nodes.files import *
+from .nodes.prompt import *
 
 __all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']
 
@@ -11,6 +12,7 @@ NODE_CLASS_MAPPINGS = {
     "RandomFloatToString": KN_RandomFloatToString,
     "GetFileCountInOutputFolder": KN_GetFileCountInOutputFolder,
     "LoadCSV": KN_CSV_Reader,
+    "DynamicPromptNode": DynamicPromptNode,
 }
  
 # A dictionary that contains the friendly/humanly readable titles for the nodes
@@ -20,6 +22,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "RandomFloatToString": "Random Float To String",
     "GetFileCountInOutputFolder": "Get Counter In Output Folder",
     "LoadCSV": "Load Prompt from CSV",
-}
+    "DynamicPromptNode": "Dynamic Prompt Generator (experimental)",
+    }
     
 print("Kaleidia Nodes: \033[92mLoaded\033[0m")

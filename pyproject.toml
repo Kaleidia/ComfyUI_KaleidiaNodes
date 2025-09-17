@@ -2,7 +2,7 @@
 [project]
 name = "ComfyUI_KaleidiaNodes" # Unique identifier for your node. Immutable after creation.
 description = "A simple set of nodes to make things easier. String Nodes and Files nodes."
-version = "1.0.3" # Custom Node version. Must be semantically versioned.
+version = "1.1.0" # Custom Node version. Must be semantically versioned.
 license = { file = "LICENSE.txt" }
 dependencies  = [] # Filled in from requirements.txt
 

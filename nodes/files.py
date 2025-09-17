@@ -1,15 +1,14 @@
 #import numpy as np
 #import random
+# Sets of paths within the comfyui directory that are automatically configured and can be reused in all projects
 import folder_paths
 import os
 import re
 import csv
 from pathlib import Path
-# from logging import Logger
 
-# logger = Logger.getlogger()
-root_dir = os.path.dirname(os.path.abspath(__file__))
-csv_path = os.path.abspath(os.path.join(root_dir, "../data"))
+# root_dir = os.path.dirname(os.path.abspath(__file__))
+# csv_path = os.path.abspath(os.path.join(root_dir, "../data"))
 
 class KN_GetFileCountInOutputFolder:
 
@@ -27,11 +26,11 @@ class KN_GetFileCountInOutputFolder:
     FUNCTION = "getCount"
 	
     CATEGORY = "KaleidiaNodes/FileNodes"
-	DESCRIPTION = "This node counts all png files in the given path under the configured output directory and then returns either the amount of files or if the files have a prefix counter, the highest counter if it is higher then the amount."
+    DESCRIPTION = "This node counts all png files in the given path under the configured output directory and then returns either the amount of files or if the files have a prefix counter, the highest counter if it is higher then the amount."
 	
     def getCount(self,path):
-        folderpath = os.path.join(folder_paths.output_directory,path)
-        folderpath = Path(folderpath)
+        # folderpath = os.path.join()
+        folderpath = Path(folder_paths.get_output_directory(),path)
         print(f"Counting files in directory: {folderpath} with file types: png")
         counter: int = 0
         lastFiles: list = list()
@@ -69,7 +68,7 @@ class KN_CSV_Reader:
     Parse file and 
     """
 
-    data_folder = Path(csv_path)
+    data_folder = Path(folder_paths.base_path)
     rows_cache = {}
 
     @classmethod
@@ -90,9 +89,9 @@ class KN_CSV_Reader:
 
     @classmethod
     def INPUT_TYPES(cls):
-        csv_files = [f.name for f in cls.data_folder.glob("styles.csv")] or ["<no csv files>"]
-        default_file = csv_files[0] if csv_files else "no files"
-        selections = cls.load_csv(default_file) if default_file != "no files" else ["select csv file"]
+        csv_files = [f.name for f in cls.data_folder.glob("styles.csv")] or ["<no csv file>"]
+        default_file = csv_files[0] if csv_files else "no file"
+        selections = cls.load_csv(default_file) if default_file != "no file" else ["select csv file"]
 
         return {
             "required": {
@@ -109,7 +108,7 @@ class KN_CSV_Reader:
     FUNCTION = "browse_csv"
 
     CATEGORY = "KaleidiaNodes/FileNodes"
-    DESCRIPTION = "Loads rows from selected csv file based on UI selection.\nFirst column is always used to provide labels for UI."
+    DESCRIPTION = "Loads rows from 'styles.csv' file. This file should be located inside the ComfyUI root directory.\nFirst column is always used to provide labels for UI."
 
     def browse_csv(self, csv_file, selection):
         file_path = self.data_folder / csv_file
