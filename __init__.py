@@ -12,7 +12,7 @@ NODE_CLASS_MAPPINGS = {
     "RandomFloatToString": KN_RandomFloatToString,
     "GetFileCountInOutputFolder": KN_GetFileCountInOutputFolder,
     "LoadCSV": KN_CSV_Reader,
-    "DynamicPromptNode": DynamicPromptNode,
+    "DynamicPromptNode": KN_DynamicPromptNode,
 }
  
 # A dictionary that contains the friendly/humanly readable titles for the nodes
