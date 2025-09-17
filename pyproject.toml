@@ -1,15 +1,15 @@
 # pyproject.toml
 [project]
-name = "KaleidiaNodes" # Unique identifier for your node. Immutable after creation.
+name = "ComfyUI_KaleidiaNodes" # Unique identifier for your node. Immutable after creation.
 description = "A simple set of nodes to make things easier. String Nodes and Files nodes."
 version = "1.0.01" # Custom Node version. Must be semantically versioned.
 license = { file = "LICENSE.txt" }
 dependencies  = [] # Filled in from requirements.txt
 
 [project.urls]
-Repository = "https://github.com/Kaleidia/KaleidiaNodes"
+Repository = "https://github.com/Kaleidia/ComfyUI_KaleidiaNodes"
 
 [tool.comfy]
 PublisherId = "kaleidia" # TODO (fill in Publisher ID from Comfy Registry Website).
-DisplayName = "KaleidiaNodes" # Display name for the Custom Node. Can be changed later.
+DisplayName = "ComfyUI_KaleidiaNodes" # Display name for the Custom Node. Can be changed later.
 #Icon = "https://example.com/icon.png" # SVG, PNG, JPG or GIF (MAX. 800x400px)
