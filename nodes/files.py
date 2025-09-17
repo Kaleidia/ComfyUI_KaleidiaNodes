@@ -17,7 +17,7 @@ class KN_GetFileCountInOutputFolder:
     def INPUT_TYPES(cls):
         return {
             "required": {
-            "path": ("STRING",{"forceInput":True}),
+            "path": ("STRING",{"Tooltip":"Path under the configured output directory"}),
             },
         }
                
@@ -27,6 +27,7 @@ class KN_GetFileCountInOutputFolder:
     FUNCTION = "getCount"
 	
     CATEGORY = "KaleidiaNodes/FileNodes"
+	DESCRIPTION = "This node counts all png files in the given path under the configured output directory and then returns either the amount of files or if the files have a prefix counter, the highest counter if it is higher then the amount."
 	
     def getCount(self,path):
         folderpath = os.path.join(folder_paths.output_directory,path)
@@ -137,3 +138,4 @@ class KN_CSV_Reader:
 # helpers
 #-------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------
+
