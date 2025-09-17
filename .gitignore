@@ -205,3 +205,6 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+/.vs/ComfyUI_KaleidiaNodes/FileContentIndex/9bad86c6-c8a7-4d2b-a7d3-45c63d313ace.vsidx
+*.vsidx
+/.vs
