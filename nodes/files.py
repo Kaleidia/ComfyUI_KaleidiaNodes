@@ -54,7 +54,7 @@ class KN_GetFileCountInOutputFolder:
                 num = int(match.group(1))
                 prefix = max(prefix, num)
 
-        counter = max(counter, prefix)
+        counter = max(counter, prefix+1)
         
         print(f"Directory contains {counter} files.")
         return (counter,)
@@ -138,4 +138,5 @@ class KN_CSV_Reader:
 # helpers
 #-------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------
+
 
