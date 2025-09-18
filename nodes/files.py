@@ -52,8 +52,9 @@ class KN_GetFileCountInOutputFolder:
             if match:
                 num = int(match.group(1))
                 prefix = max(prefix, num)
+                prefix += 1
 
-        counter = max(counter, prefix+1)
+        counter = max(counter, prefix)
         
         print(f"Directory contains {counter} files.")
         return (counter,)
