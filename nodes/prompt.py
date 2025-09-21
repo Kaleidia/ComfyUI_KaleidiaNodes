@@ -33,7 +33,7 @@ class KN_DynamicPromptNode:
                     "multiline": True,
                     "dynamicPrompts": True
                 }),
-                "seed": ("INT", {"default": -1}),
+                "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
                 "mode": (["random", "sequential"], {"default": "random"}),
                 "reset_on_change": ("BOOLEAN", {"default": True}),
             }
