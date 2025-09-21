@@ -1,4 +1,4 @@
-import random
+﻿import random
 import re
 from pathlib import Path
 from itertools import product
@@ -6,6 +6,7 @@ import json
 import yaml
 import folder_paths
 
+WILDCARD_RE = re.compile(r"__(.+?)__")
 
 class KN_DynamicPromptNode:
     """
@@ -155,54 +156,153 @@ class KN_DynamicPromptNode:
             results.append(data.strip())
         return results
 
-    def _load_category_wildcard(self, category_path):
-        if "/" in category_path:
-            root, subcat = category_path.split("/", 1)
-        else:
-            root, subcat = category_path, None
 
-        root = root.lower()
-        subcat = subcat.lower() if subcat else None
+    def _load_category_wildcard(self, category_path, visited=None):
+        """
+        Resolve a wildcard path (TXT/YAML/JSON) into a list of strings.
+        Supports:
+          - TXT subfolder files: __characters/fantasy/male__
+          - TXT wildcards with * prefix: __characters/fantasy/*__
+          - YAML/JSON categories: __videogamechars/male__
+          - YAML/JSON with *: __fantasy/races/*__
+        Returns a flat list of expanded options.
+        """
+        if visited is None:
+            visited = set()
+        cat_lower = category_path.lower()
+
+        # cycle check
+        if cat_lower in visited:
+            return []
+        visited = set(visited)
+        visited.add(cat_lower)
 
         options = []
 
-        # TXT file
-        txt_file = self.wildcard_folder / f"{category_path}.txt"
-        if txt_file.exists():
-            with open(txt_file, "r", encoding="utf-8") as f:
-                options.extend([line.strip() for line in f if line.strip()])
+        # -------------------------
+        # 1) TXT files
+        # -------------------------
+        if "*" in category_path:
+            prefix = cat_lower.split("*", 1)[0]
+            for f in self.wildcard_folder.rglob("*.txt"):
+                rel_path = f.relative_to(self.wildcard_folder).with_suffix("")
+                rel_str = rel_path.as_posix().lower()
+                if rel_str.startswith(prefix):
+                    with open(f, "r", encoding="utf-8") as fh:
+                        options.extend([line.strip() for line in fh if line.strip()])
+        else:
+            for f in self.wildcard_folder.rglob("*.txt"):
+                rel_path = f.relative_to(self.wildcard_folder).with_suffix("")
+                rel_str = rel_path.as_posix().lower()
+                if rel_str == cat_lower:
+                    with open(f, "r", encoding="utf-8") as fh:
+                        options.extend([line.strip() for line in fh if line.strip()])
 
-        # YAML / JSON files
+        if options:
+            return self._resolve_recursive_options(options, visited)
+
+        # -------------------------
+        # 2) YAML / JSON files
+        # -------------------------
+        parts = [p.lower() for p in category_path.split("/")]
+        root = parts[0]
+        rest_parts = parts[1:]
+
+        def traverse_node(node, parts_left):
+            if not parts_left:
+                return self._flatten_data(node)
+            part = parts_left[0]
+            if part == "*":
+                return self._flatten_data(node)
+            if isinstance(node, dict):
+                node_lower = {k.lower(): v for k, v in node.items() if isinstance(k, str)}
+                if part in node_lower:
+                    return traverse_node(node_lower[part], parts_left[1:])
+            return []
+
         for ext in ("yaml", "yml", "json"):
-            for f in self.wildcard_folder.glob(f"*.{ext}"):
+            for f in self.wildcard_folder.rglob(f"*.{ext}"):
                 if f in self._wildcard_cache:
                     data = self._wildcard_cache[f]
                 else:
-                    with open(f, "r", encoding="utf-8") as fh:
-                        if ext == "json":
-                            data = json.load(fh)
-                        else:
-                            data = yaml.safe_load(fh)
+                    try:
+                        with open(f, "r", encoding="utf-8") as fh:
+                            data = json.load(fh) if ext == "json" else yaml.safe_load(fh)
+                    except Exception:
+                        data = None
                     self._wildcard_cache[f] = data
 
-                if not data:
+                if not data or not isinstance(data, dict):
                     continue
 
-                # make root keys lowercase for case-insensitive match
                 data_lower = {k.lower(): v for k, v in data.items() if isinstance(k, str)}
+                if root not in data_lower:
+                    continue
 
-                if root in data_lower:
-                    node = data_lower[root]
+                yaml_options = traverse_node(data_lower[root], rest_parts)
+                if yaml_options:
+                    options.extend(yaml_options)
 
-                    # lowercase subcategory mapping if dict
-                    if isinstance(node, dict):
-                        node_lower = {k.lower(): v for k, v in node.items() if isinstance(k, str)}
-                        if subcat == "*" or subcat is None:
-                            options.extend(self._flatten_data(node_lower))
-                        elif subcat in node_lower:
-                            options.extend(self._flatten_data(node_lower[subcat]))
-                    else:
-                        # if node is list or str at root
-                        options.extend(self._flatten_data(node))
+        return self._resolve_recursive_options(options, visited)
 
-        return options
+
+    def _resolve_recursive_options(self, options, visited):
+        """Expand nested wildcards inside option strings recursively."""
+        resolved_all = []
+        for opt in options:
+            expanded = self._expand_option_with_wildcards(opt, visited)
+            resolved_all.extend(expanded)
+        return resolved_all
+
+
+    def _expand_option_with_wildcards(self, opt, visited, depth=0, max_depth=10):
+        """
+        Expand an option string with nested __wildcards__.
+        Produces all combinations (cartesian product) if multiple wildcards in one string.
+        Handles both TXT (folder-based) and YAML/JSON wildcards.
+        """
+        if depth >= max_depth:
+            return [opt]
+
+        if not WILDCARD_RE.search(opt):
+            return [opt]
+
+        parts = re.split(WILDCARD_RE, opt)
+        literal_parts = parts[0::2]
+        token_names = parts[1::2]
+
+        list_of_token_options = []
+        for token in token_names:
+            token_lower = token.lower()
+            if token_lower in visited:
+                # cycle → leave placeholder
+                list_of_token_options.append([f"__{token}__"])
+                continue
+
+            # load options for this token (TXT or YAML/JSON)
+            inner_opts = self._load_category_wildcard(token, visited=visited | {token_lower})
+            if not inner_opts:
+                list_of_token_options.append([f"__{token}__"])
+            else:
+                # ensure nested TXT expansions are also fully resolved
+                inner_resolved = self._resolve_recursive_options(inner_opts, visited | {token_lower})
+                list_of_token_options.append(inner_resolved)
+
+        expanded_results = []
+        for combo in product(*list_of_token_options):
+            text = ""
+            for i, lit in enumerate(literal_parts):
+                text += lit
+                if i < len(combo):
+                    text += combo[i]
+
+            if WILDCARD_RE.search(text):
+                # recurse into deeper nested wildcards
+                sub_expanded = self._expand_option_with_wildcards(
+                    text, visited=visited, depth=depth + 1, max_depth=max_depth
+                )
+                expanded_results.extend(sub_expanded)
+            else:
+                expanded_results.append(text)
+
+        return expanded_results

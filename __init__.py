@@ -22,7 +22,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "RandomFloatToString": "Random Float To String",
     "GetFileCountInOutputFolder": "Get Counter In Output Folder",
     "LoadCSV": "Load Prompt from CSV",
-    "DynamicPromptNode": "Dynamic Prompt Generator (experimental)",
+    "DynamicPromptNode": "Dynamic Prompt",
     }
     
 print("Kaleidia Nodes: \033[92mLoaded\033[0m")
