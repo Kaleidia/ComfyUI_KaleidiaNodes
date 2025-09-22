@@ -80,6 +80,7 @@ class KN_DynamicPromptNode:
         # inline {a|b|c}
         def replace_inline(match):
             options = [opt.strip() for opt in match.group(1).split("|")]
+            random.shuffle(options)
             choice = random.choice(options)
             return self._resolve_random(choice, depth + 1)
 
@@ -90,6 +91,7 @@ class KN_DynamicPromptNode:
             path = match.group(1).strip()
             options = self._load_category_wildcard(path)
             if options:
+                random.shuffle(options)
                 choice = random.choice(options)
                 return self._resolve_random(choice, depth + 1)
             return f"__{path}__"
