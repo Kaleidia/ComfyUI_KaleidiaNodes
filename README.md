@@ -38,7 +38,9 @@ This node generates a random integer in the provided range from min to max and o
 Similar to the integer node, it generates a random float in the range and returns the formatted string.
 
 ## Random Prompt nodes
-There is one node for random input so far. It can handle {...|...|...} as well as wildcards in from of txt, yaml and json files.
+There is one node for random input so far. It can handle {...|...|...} as well as wildcards in from of txt, yaml and json files. For txt files, it can find them in subfolders and can handle the * for selecting all files in a folder.
+The node searches for wildcards in the standard wildcard folder under the root directory of ComfyUI. Json and yaml files can be used if they are inside that folder, nesting them inside subfolders is planned for future releases.
+
 <img width="443" height="278" alt="image" src="https://github.com/user-attachments/assets/d7f85b93-43d2-4b92-b37c-98424e3eb963" />
 
 There are two modes: random and sequencial
