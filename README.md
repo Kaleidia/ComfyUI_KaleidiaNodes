@@ -1,7 +1,7 @@
 # KaleidiaNodes
 A simple set of nodes I created for comfyui to make things easier for me.
 
-There are two sets of nodes so far: file nodes and string nodes.
+There are two sets of nodes so far: file nodes, string nodes and a random prompt node.
 
 ## File Nodes
 There are two nodes here so far, one for counting png files in the comfy output directory and one for reading a csv file within the project's file structure.
@@ -36,3 +36,13 @@ This node gets an integer as input and can format it to a specified number of di
 This node generates a random integer in the provided range from min to max and outputs that as a string.
 ### Random Float to String
 Similar to the integer node, it generates a random float in the range and returns the formatted string.
+
+## Random Prompt nodes
+There is one node for random input so far. It can handle {...|...|...} as well as wildcards in from of txt, yaml and json files.
+<img width="443" height="278" alt="image" src="https://github.com/user-attachments/assets/d7f85b93-43d2-4b92-b37c-98424e3eb963" />
+
+There are two modes: random and sequencial
+### Random
+This mode just gathers all possible options for the expression and picks a random result.
+### Sequencial
+This mode tries to pick results in order of all possible options. In case of nested terms "a {{blue|red} car|{yellow|green} bike}" it will create results like: "a blue car", "a red car", "a yellow bike" and "a green bike" before starting from the beginning in the same order. !Note: this mode has some problems with too many nestings and just get the first result in wildcard categories (for yaml files). It is still experimental for the squencial mode.
