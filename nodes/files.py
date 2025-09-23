@@ -127,7 +127,7 @@ class KN_CSV_Reader:
                 for row in rows[1:]:
                     #print(f"name: {row[0]} vs selection: {selection}")
                     if row[0].strip() == str(selection).strip():
-                        print(f"{row[0]} - {row[1]} - {row[2]}")
+                        print(f"Style: {row[0]} - Positive: {row[1]} - Negative: {row[2]}")
                         return (row[1],row[2])
 
                 return (f"no match in {csv_file} for {selection}","")

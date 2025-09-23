@@ -13,6 +13,7 @@ NODE_CLASS_MAPPINGS = {
     "GetFileCountInOutputFolder": KN_GetFileCountInOutputFolder,
     "LoadCSV": KN_CSV_Reader,
     "DynamicPromptNode": KN_DynamicPromptNode,
+    "DynamicPromptNodeEXT": KN_DynamicPromptNode_Ext,
 }
  
 # A dictionary that contains the friendly/humanly readable titles for the nodes
@@ -23,6 +24,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "GetFileCountInOutputFolder": "Get Counter In Output Folder",
     "LoadCSV": "Load Prompt from CSV",
     "DynamicPromptNode": "Dynamic Prompt",
+    "DynamicPromptNodeEXT": "Dynamic Prompt Extended (Experimental)",
     }
     
 print("Kaleidia Nodes: \033[92mLoaded\033[0m")
