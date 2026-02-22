@@ -1,6 +1,7 @@
 from .nodes.toString import *
 from .nodes.files import *
 from .nodes.prompt import *
+from .nodes.log_utils import logger
 
 __all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']
 
@@ -13,7 +14,7 @@ NODE_CLASS_MAPPINGS = {
     "GetFileCountInOutputFolder": KN_GetFileCountInOutputFolder,
     "LoadCSV": KN_CSV_Reader,
     "DynamicPromptNode": KN_DynamicPromptNode,
-    "DynamicPromptNodeEXT": KN_DynamicPromptNode_Ext,
+    "SequentialPromptNode": KN_SequentialPromptNode,
 }
  
 # A dictionary that contains the friendly/humanly readable titles for the nodes
@@ -24,7 +25,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "GetFileCountInOutputFolder": "Get Counter In Output Folder",
     "LoadCSV": "Load Prompt from CSV",
     "DynamicPromptNode": "Dynamic Prompt",
-    "DynamicPromptNodeEXT": "Dynamic Prompt Extended (Experimental)",
+    "SequentialPromptNode": "Sequential Prompt",
     }
     
-print("Kaleidia Nodes: \033[92mLoaded\033[0m")
+print("[Kaleidia Nodes]: \033[92mLoaded\033[0m")
