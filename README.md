@@ -47,14 +47,14 @@ Both nodes also have a debug toggle to display debug output in the console. can 
 ### Random Prompts
 There is a simple node that just handles normal random operations. This mode just gathers all possible options for the expression and picks a random result.
 
-<img width="299" height="213" alt="image" src="https://github.com/user-attachments/assets/1717fa45-2a9a-469e-8fda-5113b88f4b64" />
+<img width="472" alt="image" src="https://github.com/user-attachments/assets/1717fa45-2a9a-469e-8fda-5113b88f4b64" />
 
 The node has a history function that remembers (only in the current session, not persistent over restarts of the UI) a specified number of used options, so if you have a long list of option in your wildcards it should not pick the same option in a row, the number set here gives the pool size after which the options are allowed again. For a wildcard with 30 entries and no repetitions the number can be set to 30 to get only unique results.
 
 ### Sequential Prompts
 There is also the node that can a sequencial setup:
 
-<img width="299" height="197" alt="image" src="https://github.com/user-attachments/assets/1182fa2a-c73f-4cfa-bd9c-7b2054988fdb" />
+<img width="472" alt="image" src="https://github.com/user-attachments/assets/1182fa2a-c73f-4cfa-bd9c-7b2054988fdb" />
 
 This mode tries to pick results in order of all possible options. In case of nested terms "a {{blue|red} car|{yellow|green} bike}" it will create results like: "a blue car", "a red car", "a yellow bike" and "a green bike" before starting from the beginning in the same order. 
 
