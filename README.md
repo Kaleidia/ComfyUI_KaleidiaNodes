@@ -39,10 +39,17 @@ Similar to the integer node, it generates a random float in the range and return
 
 ## Random Prompt nodes
 There are two nodes for random input so far.
+
 Both can handle {...|...|...} as well as wildcards in from of txt, yaml and json files. For txt files, it can find them in subfolders and can handle the * for selecting all files in a folder.
 The nodes searches for wildcards in the standard wildcard folder under the root directory of ComfyUI. Json and yaml files can be used if they are inside that folder, nesting them inside subfolders is planned for future releases.
-Both nodes handle complex prompts and have the functionality of add multiple results for a selection with the syntax of {numberOfItterations$$choice1|choice2...}, so a {2$$blue|red|green|yellow} would pick two of those choices and display them. the Nodes include an option of join style, so there you can pick if the results are separated by comma, dot, "and" or just an empty space. 
+
+Both nodes handle complex prompts and have the functionality of add multiple results for a selection with the syntax of {numberOfItterations$$choice1|choice2...}, so a {2$$blue|red|green|yellow} would pick two of those choices and display them. 
+
+The Nodes include an option of join style, so there you can pick if the results are separated by comma, dot, "and" or just an empty space. 
+
 Both nodes also have a debug toggle to display debug output in the console. can be quite helpful to see how the results were chosen and in what order.
+
+The options can be weighted in the style {0.7::red|blue|1.5::green}, so here it would prefer green over blue and blue over red. If no number is given the node assumes a 1::, a weight of 1. The weights do not need to add up to 1 or 100%. In the given example red would be rarely chosen as green is prefered and then blue has standard weight.
 
 ### Random Prompts
 There is a simple node that just handles normal random operations. This mode just gathers all possible options for the expression and picks a random result.
