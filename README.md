@@ -59,7 +59,7 @@ There is a simple node that just handles normal random operations. This mode jus
 The node has a history function that remembers (only in the current session, not persistent over restarts of the UI) a specified number of used options, so if you have a long list of option in your wildcards it should not pick the same option in a row, the number set here gives the pool size after which the options are allowed again. For a wildcard with 30 entries and no repetitions the number can be set to 30 to get only unique results.
 
 ### Sequential Prompts
-There is also the node that can a sequencial setup:
+There is also the node that can handle a sequential setup:
 
 <img width="472" alt="image" src="https://github.com/user-attachments/assets/1182fa2a-c73f-4cfa-bd9c-7b2054988fdb" />
 
