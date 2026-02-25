@@ -40,16 +40,14 @@ Similar to the integer node, it generates a random float in the range and return
 ## Random Prompt nodes
 There are two nodes for random input so far.
 Both can handle {...|...|...} as well as wildcards in from of txt, yaml and json files. For txt files, it can find them in subfolders and can handle the * for selecting all files in a folder.
-The node searches for wildcards in the standard wildcard folder under the root directory of ComfyUI. Json and yaml files can be used if they are inside that folder, nesting them inside subfolders is planned for future releases.
+The nodes searches for wildcards in the standard wildcard folder under the root directory of ComfyUI. Json and yaml files can be used if they are inside that folder, nesting them inside subfolders is planned for future releases.
 
-There is a simple node that just handles normal random operations.
+There is a simple node that just handles normal random operations. This mode just gathers all possible options for the expression and picks a random result.
 
-There is also the still experimental node that can handle two different modes:
+<img width="299" height="213" alt="image" src="https://github.com/user-attachments/assets/1717fa45-2a9a-469e-8fda-5113b88f4b64" />
 
-<img width="443" height="278" alt="image" src="https://github.com/user-attachments/assets/d7f85b93-43d2-4b92-b37c-98424e3eb963" />
+There is also the node that can a sequencial setup:
 
-There are two modes: random and sequencial
-### Random
-This mode just gathers all possible options for the expression and picks a random result.
-### Sequencial
-This mode tries to pick results in order of all possible options. In case of nested terms "a {{blue|red} car|{yellow|green} bike}" it will create results like: "a blue car", "a red car", "a yellow bike" and "a green bike" before starting from the beginning in the same order. !Note: this mode has some problems with too many nestings and just get the first result in wildcard categories (for yaml files). It is still experimental for the squencial mode.
+<img width="299" height="197" alt="image" src="https://github.com/user-attachments/assets/1182fa2a-c73f-4cfa-bd9c-7b2054988fdb" />
+
+This mode tries to pick results in order of all possible options. In case of nested terms "a {{blue|red} car|{yellow|green} bike}" it will create results like: "a blue car", "a red car", "a yellow bike" and "a green bike" before starting from the beginning in the same order. !Note: this mode has some problems with too many nestings and just get the first result in wildcard categories (for yaml files). The mode on the top determents the algorithm for sorting. It uses a gear system that locks one part and only advances the other.
