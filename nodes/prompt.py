@@ -546,6 +546,7 @@ class KN_DynamicPromptNode(BaseDynamicPromptNode):
                 "clear_history": ("BOOLEAN", {"default": False, "tooltip": "Wipes the history of used options for this session."}),
                 "history_limit": ("INT", {"default": 3, "min": 1, "max": 100, "tooltip": "How many previous choices to remember and avoid."}),
                 "debug": ("BOOLEAN", {"default": False, "tooltip": "Gives debug output to the console about the processing of the dynamic prompt. Default is false to not spam the console."}),
+                "clear_cache": ("BOOLEAN", {"default": False, "tooltip": "Clears the wildcard cache on every run. Good if you work on the wildcards on the side during image generation and do not want to completely reboot comfy. Bad as it does disk operations on every run, that might not be needed. Default is false which has the cache build once per comfy run and reused then."}),
             }
         }
 
@@ -562,7 +563,7 @@ class KN_DynamicPromptNode(BaseDynamicPromptNode):
         self._used_this_batch = set()
         self.last_template = None
 
-    def generate(self, template, seed=-1, join_style="period", use_history=False, clear_history=False, history_limit=3, debug=False):
+    def generate(self, template, seed=-1, join_style="period", use_history=False, clear_history=False, history_limit=3, debug=False, clear_cache=False):
         """
         Generate a single prompt (random).
         Steps:
@@ -590,14 +591,20 @@ class KN_DynamicPromptNode(BaseDynamicPromptNode):
         join_map = {"space": " ", "period": ". ", "comma": ", ", "and": " and "}
         joiner = join_map.get(join_style, ". ")
            
+        if clear_cache:
+            self._wildcard_cache = {}
+            if self.debug:
+                print("---------------------------------------------------------------")
+                print("[KaleidiaNodes_DynamicPromptNode] Clearing wildcard cache")
+
         if self.debug:
             logger.debug("---------------------------------------------------------------")
-            logger.debug(f"[KN_DynamicPromptNode] Start processing of prompt: {template}")
+            logger.debug(f"[KaleidiaNodes_DynamicPromptNode] Start processing of prompt: {template}")
             
         choice = self.resolve_prompt(template, joiner=joiner)
         
         if self.debug:
-            logger.debug(f"[KN_DynamicPromptNode] Selected end prompt: {choice}")
+            logger.debug(f"[KaleidiaNodes_DynamicPromptNode] Selected end prompt: {choice}")
             logger.debug(f"---------------------------------------------------------------")
 
         return (choice,)
@@ -619,7 +626,8 @@ class KN_SequentialPromptNode(BaseDynamicPromptNode):
                 "join_style": (["space", "period", "comma", "and"], {"default": "period"}),
                 "reset_counter": ("BOOLEAN", {"default": False}),
                 "debug": ("BOOLEAN", {"default": False}),
-            }
+                "clear_cache": ("BOOLEAN", {"default": False, "tooltip": "Clears the wildcard cache on every run. Good if you work on the wildcards on the side during image generation and do not want to completely reboot comfy. Bad as it does disk operations on every run, that might not be needed. Default is false which has the cache build once per comfy run and reused then."}),
+           }
         }
 
     RETURN_TYPES = ("STRING",)
@@ -629,7 +637,7 @@ class KN_SequentialPromptNode(BaseDynamicPromptNode):
     @classmethod
     def IS_CHANGED(cls, **kwargs): return cls._global_index
 
-    def generate(self, template, sequential_passes=2, index_offset=0, join_style="period", reset_counter=False, debug=False, sequence_mode="Nested (Slow -> Fast)"):
+    def generate(self, template, sequential_passes=2, index_offset=0, join_style="period", reset_counter=False, debug=False, sequence_mode="Nested (Slow -> Fast)", clear_cache=False):
         if reset_counter: KN_SequentialPromptNode._global_index = 0
         self.debug = debug
         join_map = {"space": " ", "period": ". ", "comma": ", ", "and": " and "}
@@ -638,10 +646,16 @@ class KN_SequentialPromptNode(BaseDynamicPromptNode):
         # Use our counter + user offset
         current_idx = KN_SequentialPromptNode._global_index + index_offset
         
+        if clear_cache:
+            self._wildcard_cache = {}
+            if self.debug:
+                print("---------------------------------------------------------------")
+                print("[KaleidiaNodes_DynamicPromptNode] Clearing wildcard cache")
+        
         if self.debug:
             logger.debug(f"---------------------------------------------------------------")
-            logger.debug(f"[KN_SequentialPromptNode] Start processing of prompt: {template}")
-            logger.debug(f"[KN_SequentialPromptNode] Start processing with index: {current_idx}")
+            logger.debug(f"[KaleidiaNodes_SequentialPromptNode] Start processing of prompt: {template}")
+            logger.debug(f"[KaleidiaNodes_SequentialPromptNode] Start processing with index: {current_idx}")
             
         # Resolve prompt using the sequential index
         # We pass current_idx down to _expand_wildcards_one_level
@@ -649,10 +663,10 @@ class KN_SequentialPromptNode(BaseDynamicPromptNode):
         
         # Increment for the next generation
         KN_SequentialPromptNode._global_index += 1
-        
+
         if self.debug:
-            logger.debug(f"[KN_SequentialPromptNode] Selected end prompt: {prompt}")
-            logger.debug(f"[KN_SequentialPromptNode] Next sequential index: {KN_SequentialPromptNode._global_index}")
+            logger.debug(f"[KaleidiaNodes_SequentialPromptNode] Selected end prompt: {prompt}")
+            logger.debug(f"[KaleidiaNodes_SequentialPromptNode] Next sequential index: {KN_SequentialPromptNode._global_index}")
             logger.debug(f"---------------------------------------------------------------")
             
         return (prompt, current_idx)
