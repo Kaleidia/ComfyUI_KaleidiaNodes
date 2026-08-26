@@ -63,6 +63,59 @@ class KN_GetFileCountInOutputFolder:
     def IS_CHANGED(cls, **kwargs):
         return float("NaN")
 
+class KN_GetVideoFileCountInOutputFolder:
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+            "path": ("STRING",{"Tooltip":"Path under the configured output directory"}),
+            },
+        }
+               
+    RETURN_TYPES = ("INT",)
+    RETURN_NAMES = ("File Counter",)
+	
+    FUNCTION = "getCount"
+	
+    CATEGORY = "KaleidiaNodes/FileNodes"
+    DESCRIPTION = "This node counts all mp4 files in the given path under the configured output directory and then returns either the amount of files or if the files have a prefix counter, the highest counter if it is higher then the amount."
+	
+    def getCount(self,path):
+        # folderpath = os.path.join()
+        folderpath = Path(folder_paths.get_output_directory(),path)
+        print(f"Counting files in directory: {folderpath} with file types: mp4")
+        counter: int = 0
+        lastFiles: list = list()
+
+        if not folderpath.exists() or not folderpath.is_dir():
+            print(f"Directory not there or empty, returning counter with 0")
+            return(0,)
+
+        lastFiles = [f for f in os.listdir(folderpath) if f.lower().endswith(".png")]
+        counter = len(lastFiles)
+
+        if len(lastFiles) == 0:
+            print(f"Directory empty, returning counter with 0")
+            return(0,)
+
+        prefix = 0        
+        for filename in lastFiles:
+            match = re.match(r"^0*(\d+)",filename)
+            if match:
+                num = int(match.group(1))
+                prefix = max(prefix, num)
+                prefix += 1
+
+        counter = max(counter, prefix)
+        
+        print(f"Directory contains {counter} files.")
+        return (counter,)
+        
+    @classmethod
+    def IS_CHANGED(cls, **kwargs):
+        return float("NaN")
+
 class KN_CSV_Reader:
     """
     Scan Folder for csv files and then list them.

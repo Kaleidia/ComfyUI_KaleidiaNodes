@@ -15,6 +15,7 @@ NODE_CLASS_MAPPINGS = {
     "LoadCSV": KN_CSV_Reader,
     "DynamicPromptNode": KN_DynamicPromptNode,
     "SequentialPromptNode": KN_SequentialPromptNode,
+    "GetVideoFileCountInOutputFolder": KN_GetVideoFileCountInOutputFolder,
 }
  
 # A dictionary that contains the friendly/humanly readable titles for the nodes
@@ -26,6 +27,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "LoadCSV": "Load Prompt from CSV",
     "DynamicPromptNode": "Dynamic Prompt",
     "SequentialPromptNode": "Sequential Prompt",
+    "GetVideoFileCountInOutputFolder": "Get Video Counter In Output Folder",
     }
     
 print("[Kaleidia Nodes]: \033[92mLoaded\033[0m")
