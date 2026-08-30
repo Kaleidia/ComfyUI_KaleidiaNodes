@@ -92,7 +92,7 @@ class KN_GetVideoFileCountInOutputFolder:
             print(f"Directory not there or empty, returning counter with 0")
             return(0,)
 
-        lastFiles = [f for f in os.listdir(folderpath) if f.lower().endswith(".png")]
+        lastFiles = [f for f in os.listdir(folderpath) if f.lower().endswith(".mp4")]
         counter = len(lastFiles)
 
         if len(lastFiles) == 0:
